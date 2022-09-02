@@ -1,0 +1,8 @@
+{
+    "account.fullname.blank": "Vui lòng nhập Họ và Tên!",
+    "account.password.blank": "Vui lòng nhập Mật Khẩu!",
+    "account.email.blank": "Vui lòng nhập địa chỉ Email!",
+    "account.email.exist": "Địa chỉ Email đã tồn tại!",
+    "account.passwordnew.blank": "Vui lòng nhập mật khẩu mới!",
+    "account.password.notmatch": "Mật Khẩu không đúng!"
+}

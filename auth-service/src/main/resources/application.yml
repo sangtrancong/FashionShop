@@ -1,0 +1,44 @@
+server:
+  port: 9999
+  use-forward-headers: false
+  servlet:
+    context-path: /uaa
+  
+spring:
+  profiles: default
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/shop?useSSL=false
+    username: 'root'
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+    initialization-mode: never
+    platform: mysql
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: validate
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: sangtrancong171196@gmail.com
+    password: fpdyhdgkobcfwzwf
+    port: '587'
+sender:
+  email: sangtrancong171196@gmail.com
+receiver:
+  email: luubiit@gmail.com
+check-user-scopes: true

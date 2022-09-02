@@ -1,0 +1,118 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+import PromotionService from '../services/PromotionService';
+
+export const fetchAllData = createAsyncThunk(
+    'promotions/FETCH_ALL_DATA',
+    async (data, { rejectWithValue }) => {
+        const response = await PromotionService.findAll();
+
+        if (response.status < 200 || response.status >= 300) {
+            return rejectWithValue(response);
+        }
+
+        return response.data;
+    }
+);
+
+export const fetchById = createAsyncThunk(
+    'promotions/FETCH_BY_ID',
+    async (id, { rejectWithValue }) => {
+        const response = await PromotionService.findById(id);
+        
+        if (response.status < 200 || response.status >= 300) {
+            return rejectWithValue(response);
+        }
+
+        return response.data;
+    }
+);
+
+export const saveSingle = createAsyncThunk(
+    'promotions/SAVE_DATA_SINGLE',
+    async (params, { rejectWithValue }) => {
+        const response = await PromotionService.save(params);
+
+        if (response.status < 200 || response.status >= 300) {
+            return rejectWithValue(response);
+        }
+
+        return response.data;
+    }
+);
+
+export const promotionSlice = createSlice({
+    name: "promotions",
+    initialState: {
+        isLoading: false,
+        allData: [],
+        messages: [],
+        metadata: [],
+        error: ''
+    },
+    reducers: {
+        clearSelectedItem: (state, action)=>{
+            state.selectedItem = {};
+        },
+    },
+    extraReducers: {
+        [fetchAllData.pending]: (state, action) => {
+            state.isLoading = true;
+            state.error = ''
+        },
+        [fetchAllData.fulfilled]: (state, action) => {
+            const data = action.payload.data;
+            state.isLoading = false;
+            state.allData = data;
+        },
+        [fetchAllData.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error = action.error
+        },
+
+        //fetchById
+        [fetchById.pending]: (state, action) => {
+            state.isLoading = true;
+            state.error = '';
+        },
+        [fetchById.fulfilled]: (state, action) => {
+            const { status, data, metadata } = action.payload;
+            state.isLoading = false;
+            state.selectedItem = {
+                data,
+                metadata
+            };
+        },
+        [fetchById.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error = 'ERROR';
+        },
+
+        //saveSingle
+        [saveSingle.pending]: (state, action) => {
+            state.isLoading = true;
+            state.error = ''
+        },
+        [saveSingle.fulfilled]: (state, action) => {
+            const { status, data, messages, metadata } = action.payload;
+            state.isLoading = false;
+            state.selectedItem = {
+                status,
+                data,
+                messages,
+                metadata,
+            };
+            state.error = status;
+        },
+        [saveSingle.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.selectedItem = {};
+            state.error = 'ERROR'
+        }
+
+    }
+});
+
+export const { clearSelectedItem } = promotionSlice.actions;
+
+export default promotionSlice.reducer;
